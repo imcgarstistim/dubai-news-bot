@@ -1,6 +1,6 @@
 import requests
 
-TOKEN = "7554657413:AAFcXvPt8y4SCX8Q1u8R62aAX-GZmYpseZI"
+TOKEN = "7554657413:AAEGxaBjPAflLfdT5FfdKpuSRAtQOvpxxfE"
 URL = "https://dubai-news-bot-7.onrender.com"  # آدرس اپت توی Render
 
 set_webhook_url = f"https://api.telegram.org/bot{TOKEN}/setWebhook?url={URL}"
