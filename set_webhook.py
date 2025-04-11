@@ -1,8 +1,8 @@
 import requests
 
-TOKEN = "7554657413:AAEGxaBjPAflLfdT5FfdKpuSRAtQOvpxxfE"
-URL = "https://dubai-news-bot-7.onrender.com"  # آدرس اپت توی Render
+BOT_TOKEN = '7554657413:AAEGxaBjPAflLfdT5FfdKpuSRAtQOvpxxfE'
+WEBHOOK_URL = f'https://dubai-news-bot-7.onrender.com/{BOT_TOKEN}'
 
-set_webhook_url = f"https://api.telegram.org/bot{TOKEN}/setWebhook?url={URL}"
-res = requests.get(set_webhook_url)
-print("Set webhook response:", res.text)
+response = requests.get(f'https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?url={WEBHOOK_URL}')
+print(response.text)
+
