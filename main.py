@@ -30,7 +30,7 @@ RSS_FEEDS = [
 ]
 
 translator = Translator()
-bot = telegram.Bot(token=BOT_TOKEN)
+bot = telegram.Bot(token=7554657413:AAFcXvPt8y4SCX8Q1u8R62aAX-GZmYpseZI)
 sent_articles = set()
 
 def fetch_latest_articles():
