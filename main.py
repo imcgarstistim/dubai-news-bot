@@ -52,7 +52,7 @@ def send_news():
     try:
         new_articles = fetch_latest_articles()
         for link, msg in new_articles:
-            bot.send_message(chat_id=CHAT_ID, text=msg, parse_mode=telegram.ParseMode.HTML)
+            bot.send_message(chat_id=emrooznews_bot, text=msg, parse_mode=telegram.ParseMode.HTML)
             sent_articles.add(link)
             time.sleep(3)
     except Exception as e:
