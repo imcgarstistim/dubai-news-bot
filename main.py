@@ -65,7 +65,8 @@ def run_bot():
     while True:
         now = datetime.now()
         print("⏰ در حال بررسی خبرها در:", now)
-        send_news()  # بدون شرط
+        if now.minute % 15 == 0:
+            send_news()
             time.sleep(60)
         time.sleep(20)
 
