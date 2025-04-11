@@ -4,7 +4,6 @@ import feedparser
 from datetime import datetime
 import time
 import telegram
-from googletrans import Translator
 from flask import Flask, request
 import threading
 
@@ -29,11 +28,10 @@ RSS_FEEDS = [
     "https://www.nationalgeographic.com/content/natgeo/en_us/index.rss"
 ]
 
-translator = Translator()
 bot = telegram.Bot(token=BOT_TOKEN)
 sent_articles = set()
 
-# === دریافت خبرها از فیدها و ترجمه ===
+# === دریافت خبرها از فیدها ===
 def fetch_latest_articles():
     articles = []
     for feed_url in RSS_FEEDS:
@@ -43,9 +41,8 @@ def fetch_latest_articles():
             if link not in sent_articles:
                 title = entry.title
                 summary = entry.summary if 'summary' in entry else ''
-                translated_title = translator.translate(title, src='en', dest='fa').text
-                translated_summary = translator.translate(summary, src='en', dest='fa').text
-                message = f"✉️ <b>{translated_title}</b>\n\n{translated_summary}\n\n<b>منبع:</b> {link}"
+                # فقط ارسال خبر بدون ترجمه
+                message = f"✉️ <b>{title}</b>\n\n{summary}\n\n<b>منبع:</b> {link}"
                 articles.append((link, message))
     return articles
 
@@ -77,7 +74,6 @@ app = Flask(__name__)
 def index():
     return "✅ Bot is running!"
 
-# === دریافت پیام از تلگرام (WebHook) ===
 @app.route('/', methods=['POST'])
 def webhook():
     update = telegram.Update.de_json(request.get_json(force=True), bot)
