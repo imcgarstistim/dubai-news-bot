@@ -8,7 +8,7 @@ from googletrans import Translator
 
 # ==== تنظیمات اصلی ====
 BOT_TOKEN = "7554657413:AAFcXvPt8y4SCX8Q1u8R62aAX-GZmYpseZI"
-CHAT_ID = "<emrooznews_bot>"  # در ادامه روش پیدا کردنش رو می‌گم
+CHAT_ID = "<263130171>"  # در ادامه روش پیدا کردنش رو می‌گم
 
 RSS_FEEDS = [
     # منابع فعلی
