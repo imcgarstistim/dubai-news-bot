@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 import telegram
 from googletrans import Translator
-from flask import Flask
+from flask import Flask, request
 import threading
 
 # ==== تنظیمات اصلی ====
@@ -30,9 +30,10 @@ RSS_FEEDS = [
 ]
 
 translator = Translator()
-bot = telegram.Bot(token="7554657413:AAFcXvPt8y4SCX8Q1u8R62aAX-GZmYpseZI")
+bot = telegram.Bot(token=BOT_TOKEN)
 sent_articles = set()
 
+# === دریافت خبرها از فیدها و ترجمه ===
 def fetch_latest_articles():
     articles = []
     for feed_url in RSS_FEEDS:
@@ -48,11 +49,12 @@ def fetch_latest_articles():
                 articles.append((link, message))
     return articles
 
+# === ارسال پیام به تلگرام ===
 def send_news():
     try:
         new_articles = fetch_latest_articles()
         for link, msg in new_articles:
-            bot.send_message(chat_id=emrooznews_bot, text=msg, parse_mode=telegram.ParseMode.HTML)
+            bot.send_message(chat_id=CHAT_ID, text=msg, parse_mode=telegram.ParseMode.HTML)
             sent_articles.add(link)
             time.sleep(3)
     except Exception as e:
@@ -74,15 +76,17 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return "✅ Bot is running!"
-    import requests
 
-TOKEN = "7554657413:AAFcXvPt8y4SCX8Q1u8R62aAX-GZmYpseZI"
-URL = "https://dubai-news-bot-7.onrender.com"
+# === دریافت پیام از تلگرام (WebHook) ===
+@app.route('/', methods=['POST'])
+def webhook():
+    update = telegram.Update.de_json(request.get_json(force=True), bot)
+    chat_id = update.message.chat_id
+    text = update.message.text
+    bot.send_message(chat_id=chat_id, text=f"پیام دریافت شد: {text}")
+    return 'ok'
 
-set_webhook_url = f"https://api.telegram.org/bot{TOKEN}/setWebhook?url={URL}"
-res = requests.get(set_webhook_url)
-print("Set webhook response:", res.text)
-
+# === اجرای کل اپلیکیشن ===
 if __name__ == '__main__':
     threading.Thread(target=run_bot).start()
     app.run(host='0.0.0.0', port=10000)
