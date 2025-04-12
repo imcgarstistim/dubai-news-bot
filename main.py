@@ -84,10 +84,22 @@ def index():
 
 @app.route(f'/{BOT_TOKEN}', methods=['POST'])
 def webhook():
-    update = telegram.Update.de_json(request.get_json(force=True), bot)
-    chat_id = update.message.chat_id
-    text = update.message.text
-    bot.send_message(chat_id=chat_id, text=f"پیام دریافت شد: {text}")
+    try:
+        data = request.get_json(force=True)
+        print("📥 داده دریافتی:", data)
+
+        update = telegram.Update.de_json(data, bot)
+
+        if update.message:
+            chat_id = update.message.chat_id
+            text = update.message.text
+            print(f"✅ پیام از کاربر دریافت شد: {text}")
+            bot.send_message(chat_id=chat_id, text=f"✅ پیام دریافت شد: {text}")
+        else:
+            print("⚠️ پیام نداشت یا قابل پردازش نبود.")
+    except Exception as e:
+        print("❌ خطا در پردازش پیام:", e)
+
     return 'ok'
 
 # === اجرای اپلیکیشن ===
